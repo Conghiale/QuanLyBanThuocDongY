@@ -1,9 +1,13 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Account {
     private String username;
     private String email;
     private String password;
+    private List<Integer> listIDMedicineCart;
 
     public Account() {
     }
@@ -12,6 +16,7 @@ public class Account {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.listIDMedicineCart = new ArrayList<> ();
     }
 
     public String getUsername() {
@@ -38,12 +43,21 @@ public class Account {
         this.password = password;
     }
 
+    public List<Integer> getListIDMedicineCart() {
+        return listIDMedicineCart;
+    }
+
+    public void setListIDMedicineCart(List<Integer> listIDMedicineCart) {
+        this.listIDMedicineCart = listIDMedicineCart;
+    }
+
     @Override
     public String toString() {
-        return "account{" +
+        return "Account{" +
                 "username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", IDMedicineCart=" + listIDMedicineCart +
                 '}';
     }
 }

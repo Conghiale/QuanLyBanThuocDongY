@@ -6,20 +6,20 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_print">Print</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_favourite">Favourite</string>
-    <string name="menu_history">History</string>
+    <string name="menu_create_new_medicine">Create New Medicine</string>
+    <string name="menu_update_inf_medicine">Update Information Medicine</string>
     <string name="menu_myProfile">My Profile</string>
     <string name="menu_change_password">Change Password</string>
     <string name="menu_change_myprofile">Change My Profile</string>
     <string name="menu_logout">Log out</string>
     <string name="nav_account">Account</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="home_fragment">Home Fragment</string>
-    <string name="favourite_fragment">Favourite Fragment</string>
+    <string name="home_fragment">Home</string>
     <string name="history_fragment">History Fragment</string>
+    <string name="cart_fragment">Cart</string>
     <string name="myProfile_fragment">My Profile Fragment</string>
     <string name="change_myProfile_fragment">Change My Profile Fragment</string>
     <string name="change_password_fragment">Change Password Fragment</string>

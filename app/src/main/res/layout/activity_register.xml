@@ -63,7 +63,7 @@
                 app:hintEnabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="7dp"
                 app:endIconMode="clear_text"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
@@ -85,7 +85,8 @@
                 app:hintEnabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="25dp"
+                app:counterEnabled="true"
                 app:endIconMode="password_toggle"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
@@ -107,7 +108,8 @@
                 app:hintEnabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="7dp"
+                app:counterEnabled="true"
                 app:endIconMode="password_toggle"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">

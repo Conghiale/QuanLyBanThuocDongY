@@ -9,13 +9,13 @@
             android:icon="@drawable/ic_menu_home"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_favourite"
-            android:icon="@drawable/ic_menu_favorite"
-            android:title="@string/menu_favourite" />
+            android:id="@+id/nav_create_new_medicine"
+            android:icon="@drawable/ic_create_new_medicine_circle"
+            android:title="@string/menu_create_new_medicine" />
         <item
-            android:id="@+id/nav_history"
-            android:icon="@drawable/ic_menu_history"
-            android:title="@string/menu_history" />
+            android:id="@+id/nav_update_inf_medicine"
+            android:icon="@drawable/ic_menu_update_inf_medicine"
+            android:title="@string/menu_update_inf_medicine" />
     </group>
 
     <item android:title="@string/nav_account">
@@ -38,4 +38,5 @@
                 android:title="@string/menu_logout" />
         </menu>
     </item>
+
 </menu>

@@ -2,8 +2,14 @@ package com.example.quanlybanthuocdongy;
 
 import static java.util.Objects.requireNonNull;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -12,7 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quanlybanthuocdongy.databinding.ActivityRegisterBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,10 +36,11 @@ import model.Account;
 public class RegisterActivity extends AppCompatActivity {
 
     private ActivityRegisterBinding registerBinding;
-    private List<Account> accountList = new ArrayList<> ();
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference("accounts");
-
+    private EditText inputUsername, inputEmail, inputPassword, inputConformPassword;
+    private FirebaseAuth mAuth;
+        private ProgressDialog mLoadingBar;
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("accounts");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,69 +49,69 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView (registerBinding.getRoot ());
         setTitle ("Register Account");
 
-        getDataAccountFirebase();
+        inputUsername = registerBinding.etUserName;
+        inputEmail = registerBinding.etEmail;
+        inputPassword = registerBinding.etPassword;
+        inputConformPassword = registerBinding.etConfirmPassword;
+        mAuth = FirebaseAuth.getInstance ();
+        mLoadingBar = new ProgressDialog (this);
+
+        registerBinding.tvAlreadyAccount.setOnClickListener (view -> startActivity (new Intent (this, LoginActivity.class)));
+        registerBinding.btnRegister.setOnClickListener (view -> checkCredentials());
     }
 
-    private void getDataAccountFirebase() {
-        myRef.addValueEventListener (new ValueEventListener () {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren ()) {
-                    accountList.add (dataSnapshot.getValue (Account.class));
-                }
-                registerBinding.btnRegister.setOnClickListener (view -> createAccount());
-            }
+    private void checkCredentials() {
+        String username = inputUsername.getText ().toString ();
+        String email = inputEmail.getText ().toString ();
+//        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        String password = inputPassword.getText ().toString ();
+        String confirmPassword = inputConformPassword.getText ().toString ();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e ("TAG", "onCancelled: " + error);
-            }
-        });
+        if (username.isEmpty () || username.length ()<7)
+            showError(inputUsername, "Your username is not valid!");
+        else if (email.isEmpty () || !Patterns.EMAIL_ADDRESS.matcher (email).matches ())  // !email.contains ("@")
+            showError(inputEmail, "Your email is not valid!");
+        else if (password.isEmpty () || password.length ()<7)
+            showError(inputPassword, "Password must contain at least 7 characters!");
+        else if (confirmPassword.isEmpty () || !confirmPassword.equals (password))
+            showError(inputConformPassword, "Password not match!");
+        else {
+            mLoadingBar.setTitle ("Registration");
+            mLoadingBar.setMessage ("Please wait white check your credentials");
+            mLoadingBar.setCanceledOnTouchOutside (false);
+            mLoadingBar.show ();
+
+            mAuth.createUserWithEmailAndPassword (email, password)
+                    .addOnCompleteListener (task -> {
+                        if (task.isSuccessful ()){
+                            mLoadingBar.dismiss ();
+                            Toast.makeText (this, "Successfully Registration", Toast.LENGTH_SHORT).show ();
+                            createAccount();
+                            Intent intent = new Intent (this, LoginActivity.class);
+                            intent.setFlags (Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity (intent);
+                        }else{
+                            mLoadingBar.dismiss ();
+                            Toast.makeText (this, requireNonNull (task.getException ()).toString (), Toast.LENGTH_SHORT).show ();
+                        }
+                    })
+                    .addOnFailureListener (e -> Log.e ("TAG", "onFailure: " + e));
+        }
+    }
+
+    private void showError(EditText input, String s){
+        input.setError (s);
+        input.requestFocus ();
     }
 
     private void createAccount() {
-        boolean exists = false;
         String username = registerBinding.etUserName.getText ().toString ();
         String email = registerBinding.etEmail.getText ().toString ();
         String password = registerBinding.etPassword.getText ().toString ();
-        String confirmPassword = registerBinding.etConfirmPassword.getText ().toString ();
-        Account newAccount = null;
+        Account newAccount = new Account (username, email, password);
 
-        if(username.isEmpty () || email.isEmpty () || password.isEmpty () || confirmPassword.isEmpty ()){
-            exists = true;
-            Toast.makeText (this, "Please complete all information", Toast.LENGTH_SHORT).show ();
-        } else {
-            newAccount = new Account (username, email, password);
-            if (accountList.size () > 0){
-                for (Account account : accountList) {
-                    if (username.equals (account.getUsername ())){
-                        exists = true;
-                        Toast.makeText (this, "Account already exists", Toast.LENGTH_SHORT).show ();
-                        break;
-                    }
-                }
-
-                if (!password.equals (confirmPassword) && !exists){
-                    exists = true;
-                    Toast.makeText (this, "Invalid password", Toast.LENGTH_SHORT).show ();
-                }
-            }else{
-                if (!password.equals (confirmPassword)) {
-                    exists = true;
-                    Toast.makeText (this, "Invalid password", Toast.LENGTH_SHORT).show ();
-                }
-            }
-        }
-
-        if (!exists){
-            myRef.child (username).setValue (newAccount, (error, ref) -> {
-                Toast.makeText (this, "registered successfully", Toast.LENGTH_SHORT).show ();
-                registerBinding.etUserName.setText ("");
-                registerBinding.etEmail.setText ("");
-                registerBinding.etPassword.setText ("");
-                registerBinding.etConfirmPassword.setText ("");
-                finish ();
-            });
-        }
+        myRef.child (mAuth.getCurrentUser ().getUid ()).setValue (newAccount, (error, ref) -> {
+            Log.e ("TAG", "registered successfully on realtime database: " + error);
+        });
     }
 }

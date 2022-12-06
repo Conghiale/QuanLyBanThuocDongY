@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 
 import model.Medicine;
 
-@Database (entities = {Medicine.class}, version = 1)
+@Database (entities = {Medicine.class}, version = 3)
 public abstract class MedicineDB extends RoomDatabase {
     private static MedicineDB INSTANCE;
 
@@ -30,6 +30,7 @@ public abstract class MedicineDB extends RoomDatabase {
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate (db);
                         Executors.newSingleThreadScheduledExecutor ().execute (() -> {
+                            Log.e ("TAG", "databaseBuilder - onCreate." + getInstance (context).medicineDAO ().getAllMedicine ().size ());
                             getInstance (context).medicineDAO ().insertMedicineList (Medicine.sampleData ());
                         });
                     }
@@ -38,10 +39,7 @@ public abstract class MedicineDB extends RoomDatabase {
                     public void onOpen(@NonNull SupportSQLiteDatabase db) {
                         super.onOpen (db);
                         Executors.newSingleThreadScheduledExecutor ().execute (() -> {
-                            Log.e ("TAG", "databaseBuilder - onOpen." + getInstance (context).medicineDAO ().getAllMedicine ().size ());
-                            if (getInstance (context).medicineDAO ().getAllMedicine ().isEmpty ()){
-                                getInstance (context).medicineDAO ().insertMedicineList (Medicine.sampleData ());
-                            }
+                            Log.e ("TAG", "databaseBuilder - onOpen: " + getInstance (context).medicineDAO ().getAllMedicine ().size ());
                         });
                     }
                 }).fallbackToDestructiveMigration().allowMainThreadQueries ().build ();

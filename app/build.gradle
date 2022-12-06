@@ -43,7 +43,7 @@ dependencies {
     def room_version = "2.4.2"
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0-alpha04'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
@@ -54,6 +54,14 @@ dependencies {
 
 //    implementation realtime database
     implementation 'com.google.firebase:firebase-database'
+
+//     Add the dependency for the Firebase Authentication library
+//     When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-auth'
+
+//     Add the dependency for the Cloud Storage library
+//     When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-storage'
 
 //    Room database
 //    noinspection GradleDependency
@@ -68,4 +76,11 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.1"
 //    noinspection LifecycleAnnotationProcessorWithJava8
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
+
+//    Library Bottom Navigation && viewpager
+    implementation 'com.aurelhubert:ahbottomnavigation:2.2.0'
+
+//    printer
+    implementation 'com.itextpdf:itextg:5.5.10'
+    implementation 'com.karumi:dexter:5.0.0'
 }

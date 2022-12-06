@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:background="@drawable/loginbkg"
     android:gravity="center"
+    android:id="@+id/loginActivity"
     tools:context=".LoginActivity">
 
     <androidx.cardview.widget.CardView
@@ -14,8 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         app:cardCornerRadius="30dp"
-        app:cardElevation="20dp"
-        android:background="@drawable/custom_edittext">
+        app:cardElevation="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,22 +38,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                app:counterEnabled="true"
-                app:counterMaxLength="25"
                 app:endIconMode="clear_text"
                 app:boxStrokeWidth="0dp"
                 app:boxStrokeWidthFocused="0dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/etUserName"
+                    android:id="@+id/etEmail"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/custom_edittext"
-                    android:drawableStart="@drawable/custom_ic_person"
-                    android:maxLength="25"
-                    android:hint="Username"
+                    android:drawableStart="@drawable/custom_ic_email"
+                    android:hint="Email"
                     android:drawablePadding="8dp"
-                    android:inputType="textPersonName"
+                    android:inputType="textEmailAddress"
                     android:padding="8dp"
                     android:textColor="@color/black" />
 
@@ -84,7 +81,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
-                android:layout_width="250dp"
+                android:layout_width="200dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:id="@+id/btnLogin"
